@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ApiServiceLayer.Models;assembly=ApiServiceLayer"
+             xmlns:vm="clr-namespace:Uppgift2_MAUIMobilApp_GOhman.ViewModels"
+             xmlns:services="clr-namespace:Uppgift2_MAUIMobilApp_GOhman.Services"
+             xmlns:converters="clr-namespace:Uppgift2_MAUIMobilApp_GOhman.Converters"
+             x:DataType="vm:MainPageViewModel"
+             x:Class="Uppgift2_MAUIMobilApp_GOhman.MainPage">
+
+    <RefreshView Command="{Binding RefreshPageCommand}"
+                 IsRefreshing="{Binding IsRefreshing}">
+
+        <ScrollView Background="{AppThemeBinding Dark=#0d1014, Light=White}">
+
+
+            <ScrollView.Resources>
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="Padding" Value="15"/>
+                </Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Stroke" Value="{AppThemeBinding Dark=#26292d, Light=#D9D9D9}"/>
+                    <Setter Property="StrokeThickness" Value="2"/>
+                </Style>
+                <converters:IsNullOrEmptyToBoolConverter x:Key="IsNullOrEmptyConverter"/>
+            </ScrollView.Resources>
+
+            <VerticalStackLayout>
+
+
+                <Border
+                StrokeShape="RoundRectangle 10"
+                Margin="10"
+                BackgroundColor="{AppThemeBinding Dark=#1c1c1c, Light=#F0F0F0}"
+                >
+
+                    <Picker x:Name="Picker"
+                        ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=SelectedCategory}"
+                        Title="Select Category"
+                        >
+                    </Picker>
+                </Border>
+
+                <CollectionView ItemsSource="{Binding Articles}"
+                            >
+
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ArticleViewModel">
+                            <Grid x:DataType="vm:ArticleViewModel">
+
+                                <Border BackgroundColor="{AppThemeBinding Dark=#1c1c1c, Light=#F0F0F0}"
+                                    Margin="10,10,10,20"
+                                    StrokeThickness="2"
+                                    StrokeShape="RoundRectangle 10"
+                                >
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GotoDetailCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout>
+
+                                        <Label Text="{Binding Source.Name}"
+                                           FontSize="Medium"
+                                           FontAttributes="Bold"
+                                           Padding="15, 5, 5, 5"/>
+
+                                        <Border Stroke="Transparent"
+                                            BackgroundColor="Transparent"
+                                            StrokeShape="RoundRectangle 5">
+                                            <Image Source="{Binding UrlToImage}"
+                                               HeightRequest="{Binding ImgHeight}"
+                                               Aspect="AspectFill"/>
+                                        </Border>
+                                        <Label Text="{Binding Title}"
+                                           FontSize="Body"/>
+                                        <Label Text="{Binding Author}"
+                                           IsVisible="{Binding HasAuthor}" 
+                                           FontSize="Caption"/>
+                                    </VerticalStackLayout>
+
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <VerticalStackLayout IsVisible="{Binding HideIfRefreshing}">
+
+                    <ActivityIndicator 
+                IsRunning="{Binding IsLoading}" 
+                IsVisible="{Binding IsLoading}"
+                Color="{AppThemeBinding Light=#0D0D0D, Dark=#F0F0F0}" />
+                    <Label Text="{Binding ErrorLabel}"
+                   IsVisible="{Binding ErrorLabel, Converter={StaticResource IsNullOrEmptyConverter}}"
+                   HorizontalTextAlignment="Center"
+                   TextColor="DarkRed"/>
+                    <Button Text="Load More"
+                    Margin="20, 10, 20, 20"
+                    Command="{Binding FetchByPageCommand}"
+                    IsVisible="{Binding MoreToLoad}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

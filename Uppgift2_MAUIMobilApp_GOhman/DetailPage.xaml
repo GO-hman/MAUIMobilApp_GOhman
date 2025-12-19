@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Uppgift2_MAUIMobilApp_GOhman.ViewModels"
+             x:DataType="vm:DetailsViewModel"
+             x:Class="Uppgift2_MAUIMobilApp_GOhman.DetailPage"
+             Title="{Binding Article.Title}">
+    <VerticalStackLayout
+        BackgroundColor="{AppThemeBinding Dark=#1c1c1c, Light=#F0F0F0}">
+
+            <VerticalStackLayout.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark=#f0f0f0, Light=#0D0D0D}"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+        </VerticalStackLayout.Resources>
+        <Image Source="{Binding Article.UrlToImage}"/>
+        <Label Text="{Binding Article.Title}"
+               FontSize="Title"
+               FontAttributes="Bold"/>
+        <Label Text="{Binding Article.Content}"
+               LineBreakMode="WordWrap"/>
+        <Label Text="{Binding Article.Author}"/>
+        <Label Text="Read full article"
+               TextColor="{AppThemeBinding Dark=Lightblue, Light=DarkBlue}">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
+                                      CommandParameter="{Binding Article.Url}"/>
+            </Label.GestureRecognizers>
+        </Label>
+    </VerticalStackLayout>
+</ContentPage>
