@@ -33,7 +33,7 @@ namespace Uppgift2_MAUIMobilApp_GOhman.ViewModels
         bool moreToLoad;
 
         [ObservableProperty]
-        string errorLabel;
+        string? errorLabel;
 
         [ObservableProperty]
         ObservableCollection<ArticleViewModel> articles = new();
@@ -102,6 +102,7 @@ namespace Uppgift2_MAUIMobilApp_GOhman.ViewModels
         async Task FetchByPage()
         {
             IsLoading = true;
+            MoreToLoad = false;
             Page++;
             try
             {
@@ -110,8 +111,8 @@ namespace Uppgift2_MAUIMobilApp_GOhman.ViewModels
                 {
                     Articles.Add(new ArticleViewModel(article));
                 }
-                MoreToLoad = fetchArticles.Count > 0;
                 IsLoading = false;
+                MoreToLoad = fetchArticles.Count > 0;
                 ErrorLabel = "";
                 FetchByPageCommand.NotifyCanExecuteChanged();
             }

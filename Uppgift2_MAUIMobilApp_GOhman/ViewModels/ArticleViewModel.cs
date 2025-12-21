@@ -33,9 +33,7 @@ namespace Uppgift2_MAUIMobilApp_GOhman.ViewModels
         [ObservableProperty]
 
         private string author;
-        [ObservableProperty]
-
-        string title;
+     
         [ObservableProperty]
 
         string description;
